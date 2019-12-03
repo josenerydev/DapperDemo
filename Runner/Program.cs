@@ -14,6 +14,86 @@ namespace Runner
             Initialize();
 
             Get_all_should_return_6_results();
+
+            var id = Insert_should_assign_identity_to_new_entity();
+            Find_should_retrieve_existing_entity(id);
+            Modify_should_update_existing_entity(id);
+            Delete_should_remove_entity(id);
+        }
+
+        static void Delete_should_remove_entity(int id)
+        {
+            // arrange
+            IContactRepository repository = CreateRepository();
+
+            // act
+            repository.Remove(id);
+
+            // create a new repository for verification purposes
+            IContactRepository repository2 = CreateRepository();
+            var deletedEntity = repository2.Find(id);
+
+            // assert
+            Debug.Assert(deletedEntity == null);
+            Console.WriteLine("*** Contact Deleted ***");
+        }
+
+        static void Modify_should_update_existing_entity(int id)
+        {
+            // arrange
+            IContactRepository repository = CreateRepository();
+
+            // act
+            var contact = repository.Find(id);
+            contact.FirstName = "Bob";
+            repository.Update(contact);
+
+            // create a new repository for verification purposes
+            IContactRepository repository2 = CreateRepository();
+            var modifiedContact = repository2.Find(id);
+
+            // assert
+            Console.WriteLine("*** Contact Modified ***");
+            modifiedContact.Output();
+            Debug.Assert(modifiedContact.FirstName == "Bob");
+        }
+
+        static void Find_should_retrieve_existing_entity(int id)
+        {
+            // arrange
+            IContactRepository repository = CreateRepository();
+
+            // act
+            var contact = repository.Find(id);
+
+            // assert
+            Console.WriteLine("*** Get Contact ***");
+            contact.Output();
+            Debug.Assert(contact.FirstName == "Joe");
+            Debug.Assert(contact.LastName == "Blow");
+        }
+
+        static int Insert_should_assign_identity_to_new_entity()
+        {
+            // arrange
+            IContactRepository repository = CreateRepository();
+            var contact = new Contact
+            {
+                FirstName = "Joe",
+                LastName = "Blow",
+                Email = "joe.blow@gmail.com",
+                Company = "Microsoft",
+                Title = "Developer"
+            };
+
+            // act
+            repository.Add(contact);
+
+            // assert
+            Debug.Assert(contact.Id != 0);
+            Console.WriteLine("*** Contact Inserted ***");
+            Console.WriteLine($"New ID: {contact.Id}");
+            return contact.Id;
         }
 
         static void Get_all_should_return_6_results()
@@ -40,7 +120,8 @@ namespace Runner
 
         private static IContactRepository CreateRepository()
         {
-            return new ContactRepository(config.GetConnectionString("DefaultConnection"));
+            //return new ContactRepository(config.GetConnectionString("DefaultConnection"));
+            return new ContactRepositoryContrib(config.GetConnectionString("DefaultConnection"));
         }
     }
 }
