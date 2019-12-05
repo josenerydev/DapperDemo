@@ -30,6 +30,11 @@ namespace DataLayer
             return this.db.Get<Contact>(id);
         }
 
+        public Contact GetFullContact(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Contact> GetAll()
         {
             return this.db.GetAll<Contact>().ToList();
@@ -44,6 +49,11 @@ namespace DataLayer
         {
             this.db.Update(contact);
             return contact;
+        }
+
+        public void Save(Contact contact)
+        {
+            throw new NotImplementedException();
         }
     }
 }
