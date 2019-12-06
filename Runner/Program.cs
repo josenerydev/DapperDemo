@@ -143,8 +143,9 @@ namespace Runner
 
         private static IContactRepository CreateRepository()
         {
-            return new ContactRepository(config.GetConnectionString("DefaultConnection"));
+            //return new ContactRepository(config.GetConnectionString("DefaultConnection"));
             //return new ContactRepositoryContrib(config.GetConnectionString("DefaultConnection"));
+            return new ContactRepositorySP(config.GetConnectionString("DefaultConnection"));
         }
     }
 }
