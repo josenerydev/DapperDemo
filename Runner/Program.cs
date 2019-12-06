@@ -1,6 +1,7 @@
 ﻿using DataLayer;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,28 @@ namespace Runner
             //mj.Output();
 
             //List_support_should_produce_correct_results();
-            Dynamic_support_should_produce_correct_results();
+            //Dynamic_support_should_produce_correct_results();
+            Bulk_insert_should_insert_4_rows();
+        }
+
+        static void Bulk_insert_should_insert_4_rows()
+        {
+            // arrange
+            var repository = CreateRepositoryEx();
+            var contacts = new List<Contact>
+            {
+                new Contact { FirstName = "Charles", LastName = "Barkley" },
+                new Contact { FirstName = "Scottie", LastName = "Pippen" },
+                new Contact { FirstName = "Tim", LastName = "Duncan" },
+                new Contact { FirstName = "Patrick", LastName = "Ewing" }
+            };
+
+            // act
+            var rowsAffected = repository.BulkInsertContacts(contacts);
+
+            // assert
+            Console.WriteLine($"Rows inserted: {rowsAffected}");
+            Debug.Assert(rowsAffected == 4);
         }
 
         static void Dynamic_support_should_produce_correct_results()
