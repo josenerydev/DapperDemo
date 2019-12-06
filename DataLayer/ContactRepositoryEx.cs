@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Linq;
 using Dapper;
+using System.Threading.Tasks;
 
 namespace DataLayer
 {
@@ -15,6 +16,12 @@ namespace DataLayer
         public ContactRepositoryEx(string connString)
         {
             this.db = new SqlConnection(connString);
+        }
+
+        public async Task<List<Contact>> GetAllAsync()
+        {
+            var contacts = await this.db.QueryAsync<Contact>("SELECT * FROM Contacts");
+            return contacts.ToList();
         }
 
         public List<Contact> GetAllContactsWithAddresses()
