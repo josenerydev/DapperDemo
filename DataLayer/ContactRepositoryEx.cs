@@ -21,5 +21,10 @@ namespace DataLayer
         {
             return this.db.Query<Contact>("SELECT * FROM Contacts WHERE Id IN @Ids", new { Ids = ids }).ToList();
         }
+
+        public List<dynamic> GetDynamicContactsById(params int[] ids)
+        {
+            return this.db.Query("SELECT * FROM Contacts WHERE Id IN @Ids", new { Ids = ids }).ToList();
+        }
     }
 }
